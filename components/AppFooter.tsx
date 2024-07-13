@@ -1,19 +1,17 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-const AppFooter = () :React.JSX.Element =>{
-    const hello = "Hello TNI Footer";
-    const hello2 = <Text>Hello JSX</Text>;
-    const isLogin =  true;
+
+type AppFooterProps={
+  nameF:String;
+}
+
+const AppFooter = ({nameF}:AppFooterProps) :React.JSX.Element =>{
   return (
-    <View>
-      <Text style={styles.mytext}>
-        {hello} Date:{new Date().toLocaleDateString()}
-        </Text>
-        {hello2}
-        {isLogin && <Text>Welcome Boss</Text>}
-        {isLogin ?<Text>Welcome Marry</Text> :<Text>forgot to login</Text>
-        }
+    <View style={styles.footer}>
+       <Text style={styles.footerText}>
+            {nameF}
+       </Text>
     </View>
   )
 }
@@ -21,8 +19,19 @@ const AppFooter = () :React.JSX.Element =>{
 export default AppFooter
 
 const styles = StyleSheet.create({
-    mytext:{
-        color:'red'
-
-    }
-})
+  footer: {
+  backgroundColor: '#f8f8f8',
+  padding: 20,
+  alignItems: 'center',
+  justifyContent: 'center',
+  position: 'absolute',
+  left: 0,
+  right: 0,
+  bottom: 0,
+  },
+  footerText: {
+  fontSize: 16,
+  fontWeight: 'bold',
+  color: '#333',
+  },
+  });
