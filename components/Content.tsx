@@ -6,19 +6,15 @@ type ContextProps = {
   textC:string;
 }
 
-//const onClickMe = () => {Alert. alert("Hello",nameC)}; อันนี้ไม่ได้พยายามแล้วครับ
+const onClick = (nameC:string) => {
+  Alert. alert("Hello",nameC);
+};
 
 const content = ({textC,nameC}:ContextProps):React.JSX.Element => {
   return (
     <View style={styles.content}>
-      <Text style={styles.text}>
-        {textC}
-      </Text>
-      <Button
-          title ="Click Me"
-          onPress = {()=>Alert.alert("Hello",nameC)}
-          color = "blue"
-      ></Button>
+      <Text style={styles.text}>{textC}</Text>
+      <Button title="Click me" onPress={() => onClick(nameC)} />
     </View>
   )
 }
