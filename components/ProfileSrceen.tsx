@@ -4,17 +4,23 @@ import styles from "../styles/styles";
 
 const ProfileSrceen = (): React.JSX.Element => {
   const [name, setName] = useState("Panachai Lormngkhonkit");
-  const [Img, setImg] = useState(require("../assets/Profile_1.jpg"));
+  const [ProfileImage, setImg] = useState(require("../assets/Profile_1.jpg"));  
+   const Img1 = require("../assets/Profile_1.jpg")
+   const Img2 = require("../assets/Profile_2.jpg")
   const handleChangeName = () => {
-    setName("New Name");
+    setName(name == "New Name" ? "Panchai Lormongkhonkit" : "New Name");
   };
   const handleChangeImg = () => {
-    setImg(require("../assets/Profile_2.jpg"));
+    setImg(
+        ProfileImage == Img2
+        ? Img1
+        : Img2  
+    );
   };
   return (
     <View style={styles.container}>
       <View style={styles.profileContainer}>
-        <Image source={Img} style={styles.profileImage} />
+        <Image source={ProfileImage} style={styles.profileImage} />
         <View>
           <Text style={styles.profileName}>{name}</Text>
           <Button title="CHANGE NAME" onPress={handleChangeName} />
