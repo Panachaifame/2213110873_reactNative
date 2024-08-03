@@ -18,11 +18,15 @@ function App(): React.JSX.Element {
     console.log(`Fullname has changed to : ${fullName}`);
   },[fullName]);
 
+  const handleButtonClick=() => {
+    Alert.alert("Hello", `Input your fullname : ${fullName}`);
+  };
+
   return (
     <View style={styles.container}>
       <AppHeader fullname = {fullName} message={message}/>
-      <Content  message = {message} fullname = {fullName}/>
-      
+      {/*<Content  message = {message} fullname = {fullName}/>*/}
+      <Content message = {message} onButtonClick = {handleButtonClick}/>
       <TextInput
       style = {stylesPractice.input}
       placeholder = "Enter your fullname"
