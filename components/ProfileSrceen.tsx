@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Image, Button } from "react-native";
 import React, { useState } from "react";
-import styles from "../styles/styles";
+import {styles} from "../styles/styles";
 
 const ProfileSrceen = (): React.JSX.Element => {
   const [name, setName] = useState("Panachai Lormngkhonkit");

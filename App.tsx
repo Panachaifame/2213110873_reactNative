@@ -1,16 +1,45 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import ProfileSrceen from './components/ProfileSrceen'
+import { StyleSheet, Text, View, Button, Alert, TextInput } from "react-native";
+import AppFooter from "./components/AppFooter";
+import AppHeader from "./components/AppHeader";
+import Content from "./components/Content";
+import { stylesPractice} from './styles/styles';
+import { useState, useEffect, Component } from "react";
 
+function App(): React.JSX.Element {
+  const [fullName, setFullname] = useState('');
+  const [message, setMessage] = useState('Message from App.tsx');
+  const [footerMessage, setFooterMessage] = useState('Thai-Nichi Institute of Technology');
 
-const App = () => {
+  useEffect(()=>{
+    console.log("Component has mounted")
+  },[]);
+
+  useEffect(()=>{
+    console.log(`Fullname has changed to : ${fullName}`);
+  },[fullName]);
+
   return (
-    <View>
-      <ProfileSrceen/>
+    <View style={styles.container}>
+      <AppHeader fullname = {fullName} message={message}/>
+      <Content  message = {message} fullname = {fullName}/>
+      
+      <TextInput
+      style = {stylesPractice.input}
+      placeholder = "Enter your fullname"
+      value={fullName}
+      onChangeText={setFullname}
+      
+      />
+      <AppFooter footerMessage ={footerMessage} />
     </View>
-  )
+  );
 }
 
-export default App
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+    // justifyContent:"space-between"
+  },
+});
 
-const styles = StyleSheet.create({})
+export default App;

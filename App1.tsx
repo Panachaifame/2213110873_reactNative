@@ -6,7 +6,7 @@ import Content from "./components/Content"
 
 
 export default function App():React.JSX.Element {
- 
+
   return (
     <View style={styles.container}>
       <AppHeader nameH = "Panachai Lormongkhonkit"  textH = "Message from App.tsk" />
@@ -16,7 +16,6 @@ export default function App():React.JSX.Element {
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
