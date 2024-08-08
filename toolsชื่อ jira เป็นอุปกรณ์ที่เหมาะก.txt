@@ -1,0 +1,3 @@
+toolsชื่อ jira เป็นอุปกรณ์ที่เหมาะกับการทำ กระบวนการ Requirement Engineering โดย
+สามารถสร้างโปรเจคได้โดยการกด Project>>Create Project แล้วที่เราจะใช้ในโปรเจคนั้นจะอยู่ใน Template ของ Software development และสามารถเลือกใช้ได้2 แบบคือ Karban และ Scrum โดยจะเลือก Scrum เป็นแบบสาธิต กด Use Template ได้เลย โดย jira จะมี  project type 2 แบบ ได้แก่ Team-managed และ Company-managed 
+
