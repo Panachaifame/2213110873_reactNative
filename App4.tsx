@@ -5,7 +5,7 @@ import Content from "./components/Content";
 import { stylesPractice} from './styles/styles';
 import { useState, useEffect, Component } from "react";
 
-function App(): React.JSX.Element {
+//function App(): React.JSX.Element {
   const [fullName, setFullname] = useState('');
   const [message, setMessage] = useState('Message from App.tsx');
   const [footerMessage, setFooterMessage] = useState('Thai-Nichi Institute of Technology');
