@@ -10,7 +10,7 @@ interface WeatherState {
 }
 
 
-const WeatherLondon = (): React.JSX.Element => {
+const WeatherBangkok = (): React.JSX.Element => {
   const [state, setState] = useState<WeatherState>({
     data: null,
     loading: true,
@@ -88,7 +88,7 @@ const WeatherLondon = (): React.JSX.Element => {
   );
 };
 
-export default WeatherLondon;
+export default WeatherBangkok;
 
 const styles = StyleSheet.create({
   container: {
