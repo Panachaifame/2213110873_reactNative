@@ -2,20 +2,23 @@ import { View, Text } from "react-native";
 import React from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Header, Icon, ListItem } from "@rneui/base";
+import { useAppSelector } from "../redux-toolkit/hook";
+import { selectAuthState } from "../auth/auth-sliec";
+
 const MenuScreen = ({ navigation }: any): React.JSX.Element => {
+  const { profile } = useAppSelector(selectAuthState);
   return (
     <View>
       <Header
         barStyle="default"
         centerComponent={{
-          text: "Thai-Nichi",
+          text: profile ? "Welcome, " + profile.name : "",
           style: { color: "#fff" },
         }}
         containerStyle={{ width: "100%", height: 200 }}
       />
       <>
         <ListItem
-          bottomDivider
           onPress={() => {
             navigation.navigate("HomeStack");
           }}
@@ -27,7 +30,6 @@ const MenuScreen = ({ navigation }: any): React.JSX.Element => {
           <ListItem.Chevron />
         </ListItem>
         <ListItem
-          bottomDivider
           onPress={() => {
             navigation.navigate("ProductStack");
           }}
@@ -42,4 +44,5 @@ const MenuScreen = ({ navigation }: any): React.JSX.Element => {
     </View>
   );
 };
+
 export default MenuScreen;

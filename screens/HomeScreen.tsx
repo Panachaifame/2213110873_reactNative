@@ -1,20 +1,29 @@
-import { View, Text, Button, StyleSheet, Alert } from "react-native";
+import { View, Button, StyleSheet } from "react-native";
 import React, { useLayoutEffect } from "react";
 import MaterialIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useNavigation } from "@react-navigation/native";
 import AppLogo from "../components/AppLogo";
 import {
-  Item,
-  HeaderButtons,
   HeaderButton,
+  HeaderButtons,
+  Item,
 } from "react-navigation-header-buttons";
+
+import { Text } from "@rneui/base"; //use Text from react-native base
+import { useAppDispatch, useAppSelector } from "../redux-toolkit/hook";
+import { selectAuthState, setIsLoading, setIsLogin } from "../auth/auth-sliec";
+import { logout } from "../services/auth-servise";
 const MaterialHeaderButton = (props: any) => (
   // the `props` here come from <Item ... />
   // you may access them and pass something else to `HeaderButton` if you like
   <HeaderButton IconComponent={MaterialIcon} iconSize={23} {...props} />
 );
+
 const HomeScreen = (): React.JSX.Element => {
   const navigation = useNavigation<any>();
+  const dispatch = useAppDispatch();
+  const { profile } = useAppSelector(selectAuthState);
+
   useLayoutEffect(() => {
     navigation.setOptions({
       title: "หน้าหลัก",
@@ -22,33 +31,49 @@ const HomeScreen = (): React.JSX.Element => {
       headerTitleAlign: "center",
       headerLeft: () => (
         <HeaderButtons HeaderButtonComponent={MaterialHeaderButton}>
-          <Item title="menu" iconName="menu" onPress={() => {
-            navigation.openDrawer();
-          }}/>
+          <Item
+            title="menu"
+            iconName="menu"
+            onPress={() => {
+              navigation.openDrawer();
+            }}
+          />
         </HeaderButtons>
       ),
       headerRight: () => (
         <HeaderButtons HeaderButtonComponent={MaterialHeaderButton}>
-          <Item title="logout" iconName="logout" onPress={() => {
-            Alert.alert("Logout","Close Menu");
-          }}/>
+          <Item
+            title="logout"
+            iconName="logout"
+            onPress={async () => {
+              await logout();
+              dispatch(setIsLogin(false));
+            }}
+          />
         </HeaderButtons>
-      )
+      ),
     });
   }, [navigation]);
 
   const gotoAbout = () => {
     navigation.navigate("About", {
-      companyName: "Thai-Nichi Institute of Technology",
+      companyName: "Thai-Nichi Institude of Technology",
       companyId: 100,
     });
   };
 
   return (
     <View style={styles.container}>
-      <MaterialIcon name="home" size={50} color={"pink"} />
-      <Text style={styles.header}>HomeScreen</Text>
-      <Button title="About us" onPress={gotoAbout}></Button>
+      <MaterialIcon name="home" size={40} color="pink" />
+      {profile ? (
+        <>
+          <Text h3>Welcone {profile.name}</Text>
+          <Text>
+            Email: {profile.email} ID: {profile.id} Role: {profile.role}
+          </Text>
+        </>
+      ) : null}
+      <Button title="About Us" onPress={gotoAbout} />
     </View>
   );
 };
@@ -73,7 +98,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   postContent: {
-    color: "blue", // เปลี่ยนสีข้อความที่ถูกส่งกลับมา
+    color: "blue", // เปลี่ยนสีข้อความที่ถูกส่งกลับมา​
+
     fontWeight: "bold",
   },
 });

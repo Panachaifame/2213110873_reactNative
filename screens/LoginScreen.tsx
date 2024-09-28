@@ -1,13 +1,19 @@
 import { View } from "react-native";
-import React from "react";
-import { Text, Card, Input, Button } from "@rneui/base";
+import React, { useState } from "react";
+import { Text, Card, Input, Button, Icon } from "@rneui/base";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useForm, Controller } from "react-hook-form";
 import { Login } from "../services/auth-servise";
 import { AxiosError } from "../services/http-service";
 import Toast from "react-native-toast-message";
+import { setIsLogin } from "../auth/auth-sliec";
+import { useAppDispatch } from "../redux-toolkit/hook";
+
 const LoginScreen = (): React.JSX.Element => {
+  const [showPassword, setShowPassword] = useState(false);
+  const dispatch = useAppDispatch();
+  // 1.define validation with Yub schema
   const schema = yup.object().shape({
     email: yup
       .string()
@@ -16,45 +22,45 @@ const LoginScreen = (): React.JSX.Element => {
     password: yup
       .string()
       .required("Please input password")
-      .min(3, "Password must be at least 3 characters"),
+      .min(3, "Password must br at least 3 characters."),
   });
-  // Apply with React Hook Form
+  // 2.apply with React Hook form
   const {
-    control, // use for control input field through React Hook Form
-    handleSubmit, // a function that use for form management while the form is sending
-    formState: { errors, isSubmitting, isValid }, // bring values from form to check the form status
+    control,
+    handleSubmit,
+    formState: { errors, isSubmitting, isValid },
   } = useForm({
     resolver: yupResolver(schema),
     mode: "all",
-  }); // end of useForm
+  });
+
   const onLogin = async (data: any) => {
     try {
-      const res = await Login(data.email, data.password);
-      if (res.status === 200) {
-        Toast.show({ type: "success", text1: "Login Success." });
-        // console.log("Login Success.");
+      const response = await Login(data.email, data.password);
+      if (response.status === 200) {
+        dispatch(setIsLogin(true));
+        // Toast.show({ type: "success", text1: "Login Success" });
+        // console.log("login success");
       }
     } catch (error: any) {
-      //handle error from Axios TypeScript
-      let err: AxiosError<any> = error; // explicitly convert errors to AxiosError
-      // status 401
+      let err: AxiosError<any> = error; //แปลงความผิดพลาดให้เป็น AxiosError
       if (err.response?.status === 401) {
-        Toast.show({ type: "error", text1: err.response?.data.message });
-        // console.log(err.response?.data.message);
+        Toast.show({ type: "error", text1: err.response.data.message });
+        // console.log(err.response.data.message);
       } else {
+        // console.log("เกิดข้อผิดพลาด ไม่สามารถติดต่อกับ Server ได้");
         Toast.show({
           type: "error",
-          text1: "An error occurred. Unable to connect the server.",
+          text1: "เกิดข้อผิดพลาด ไม่สามารถติดต่อกับ Server ได้",
         });
-        // console.log("An error occurred. Unable to connect the server.");
       }
     }
   };
+
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text h2>Thai-Nichi</Text>
+      <Text h2>Tharit</Text>
       <Card containerStyle={{ padding: 10, width: "90%" }}>
-        {/* check email */}
         <Controller
           name="email"
           control={control}
@@ -70,7 +76,6 @@ const LoginScreen = (): React.JSX.Element => {
             />
           )}
         />
-        {/* check password */}
         <Controller
           name="password"
           control={control}
@@ -78,17 +83,26 @@ const LoginScreen = (): React.JSX.Element => {
             <Input
               placeholder="Password"
               leftIcon={{ name: "key" }}
-              keyboardType="number-pad"
+              rightIcon={
+                // เพิ่ม Icon สำหรับสลับการแสดงรหัสผ่าน
+                <Icon
+                  name={showPassword ? "eye" : "eye-off"}
+                  type="feather"
+                  onPress={() => setShowPassword(!showPassword)}
+                />
+              }
+              keyboardType="default"
+              secureTextEntry={!showPassword}
               onBlur={onBlur}
               onChangeText={onChange}
               value={value}
               errorMessage={errors.password?.message}
-              secureTextEntry
             />
           )}
         />
+
         <Button
-          title="Log In"
+          title="Log in"
           size="lg"
           onPress={handleSubmit(onLogin)}
           loading={isSubmitting}
@@ -98,4 +112,5 @@ const LoginScreen = (): React.JSX.Element => {
     </View>
   );
 };
+
 export default LoginScreen;

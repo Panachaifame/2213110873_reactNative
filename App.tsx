@@ -4,6 +4,8 @@ import "react-native-gesture-handler";
 import React, { useState } from "react";
 import { HeaderButtonsProvider } from "react-navigation-header-buttons";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { Provider } from "react-redux";
+import { store } from "./redux-toolkit/store";
 
 import HomeScreen from "./screens/HomeScreen";
 import AboutScreen from "./screens/AboutScreen";
@@ -11,15 +13,14 @@ import CreatePostScreen from "./screens/CreatePostScreen";
 import MenuScreen from "./screens/MenuScreen";
 import ProductScreen from "./screens/ProductScreen";
 import DetailScreen from "./screens/DetailScreen";
+import LoginScreen from "./screens/LoginScreen";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import LoginScreen from "./screens/LoginScreen";
-import Login from "./components/Login";
 import Toast from "react-native-toast-message";
 
-const Homestack = createNativeStackNavigator();
+const HomeStack = createNativeStackNavigator();
 const ProductStack = createNativeStackNavigator();
 const LoginStack = createNativeStackNavigator();
 
@@ -27,33 +28,25 @@ const Drawer = createDrawerNavigator();
 
 function HomeStackScreen() {
   return (
-    <Homestack.Navigator
+    <HomeStack.Navigator
       initialRouteName="Home"
       screenOptions={{
         //Global
-        // headerStyle: { backgroundColor: "#20b2aa" },
-        // headerTintColor: "white",
         headerTitleStyle: { fontWeight: "bold" },
-        //headerTitleAlign: "center",
       }}
     >
-      <Homestack.Screen
-        name="Home"
-        component={HomeScreen}
-        // options={{ title: "หน้าหลัก" }}
-      />
-      <Homestack.Screen
+      <HomeStack.Screen name="Home" component={HomeScreen} />
+      <HomeStack.Screen
         name="About"
         component={AboutScreen}
         options={{
-          //Screen
           title: "เกี่ยวกับเรา",
           headerStyle: { backgroundColor: "#20b2aa" },
           headerTintColor: "white",
           headerTitleAlign: "center",
         }}
       />
-    </Homestack.Navigator>
+    </HomeStack.Navigator>
   );
 }
 
@@ -86,34 +79,37 @@ function LoginStackScreen() {
   );
 }
 
-function App(): React.JSX.Element {
+const App = (): React.JSX.Element => {
   const [isLogin] = useState(false);
-
   return (
     <>
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <HeaderButtonsProvider stackType="native">
-            {isLogin ? (
-              <Drawer.Navigator
-                screenOptions={{ headerShown: false }}
-                drawerContent={(props) => <MenuScreen {...props} />}
-              >
-                <Drawer.Screen name="HomeStack" component={HomeStackScreen} />
-                <Drawer.Screen
-                  name="ProductStack"
-                  component={ProductStackScreen}
-                />
-              </Drawer.Navigator>
-            ) : (
-              <LoginStackScreen />
-            )}
-          </HeaderButtonsProvider>
-        </NavigationContainer>
-      </SafeAreaProvider>
+      <HeaderButtonsProvider stackType="native">
+        {isLogin ? (
+          <Drawer.Navigator
+            screenOptions={{ headerShown: false }}
+            drawerContent={(props) => <MenuScreen {...props} />}
+          >
+            <Drawer.Screen name="HomeStack" component={HomeStackScreen} />
+            <Drawer.Screen name="ProductStack" component={ProductStackScreen} />
+          </Drawer.Navigator>
+        ) : (
+          <LoginStackScreen />
+        )}
+      </HeaderButtonsProvider>
       <Toast />
     </>
   );
-}
+};
+const AppWrapper = () => {
+  return (
+    <Provider store={store}>
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <App />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    </Provider>
+  );
+};
 
-export default App;
+export default AppWrapper;
